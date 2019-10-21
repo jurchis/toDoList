@@ -27,7 +27,7 @@ public class DatabaseConfiguration {
             properties.load(inputStream);
 
             //announcing driver manager about below
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(properties.getProperty("DB_DRIVER_CLASS"));
 
             return DriverManager.getConnection(properties.getProperty("DB_URL"),
                     properties.getProperty("DB_USERNAME"),
