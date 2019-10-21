@@ -13,7 +13,7 @@ public class DatabaseConfiguration {
     //Google search: mysql-connector-java maven
     //then we go in pom.xml -> dependencies section
 
-    public static Connection getConnection() throws IOException, SQLException {
+    public static Connection getConnection() throws IOException, SQLException, ClassNotFoundException {
 
         Properties properties = new Properties();
 
@@ -25,6 +25,9 @@ public class DatabaseConfiguration {
         //Select all below and press Ctrl+Alt+T and execute try/finally to surround the code
         try {
             properties.load(inputStream);
+
+            //announcing driver manager about below
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             return DriverManager.getConnection(properties.getProperty("DB_URL"),
                     properties.getProperty("DB_USERNAME"),
