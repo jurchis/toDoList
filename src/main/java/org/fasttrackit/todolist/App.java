@@ -1,4 +1,4 @@
-package org.fasttrackit;
+package org.fasttrackit.todolist;
 
 /**
  * Hello world!
