@@ -11,11 +11,9 @@ import java.util.List;
 
 /**
  * Hello world!
- *
  */
-public class App 
-{
-    public static void main( String[] args ) throws SQLException, IOException, ClassNotFoundException {
+public class App {
+    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
         CreateToDoItemRequest request = new CreateToDoItemRequest();
         request.setDescription("Learn JDBC");
         request.setDeadline(LocalDate.now().plusWeeks(1));

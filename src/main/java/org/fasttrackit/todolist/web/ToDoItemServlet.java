@@ -1,7 +1,6 @@
 package org.fasttrackit.todolist.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.fasttrackit.todolist.config.ObjectMapperConfiguration;
 import org.fasttrackit.todolist.domain.ToDoItem;
 import org.fasttrackit.todolist.service.ToDoItemService;
 import org.fasttrackit.todolist.transfer.CreateToDoItemRequest;
@@ -29,16 +28,18 @@ public class ToDoItemServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        //with object mapper we read from the request
-        ObjectMapper objectMapper = new ObjectMapper();
+//        with object mapper we read from the request
+//        we created a separate class to replace below in most methods
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.registerModule(new JavaTimeModule());
 
-        objectMapper.registerModule(new JavaTimeModule());
         CreateToDoItemRequest request =
-                objectMapper.readValue(req.getReader(), CreateToDoItemRequest.class);
+                ObjectMapperConfiguration.getObjectMapper()
+                        .readValue(req.getReader(), CreateToDoItemRequest.class);
         try {
             toDoItemService.createToDoItem(request);
         } catch (SQLException | ClassNotFoundException e) {
-            resp.sendError(500,"Internal Server Error: " + e.getMessage());
+            resp.sendError(500, "Internal Server Error: " + e.getMessage());
         }
     }
 
@@ -54,23 +55,25 @@ public class ToDoItemServlet extends HttpServlet {
         try {
             toDoItemService.deleteToDoItem(Long.parseLong(id));
         } catch (SQLException | ClassNotFoundException e) {
-            resp.sendError(500,"Internal Server Error: " + e.getMessage());
+            resp.sendError(500, "Internal Server Error: " + e.getMessage());
         }
     }
 
     //UPDATE
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id =req.getParameter("id");
+        String id = req.getParameter("id");
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
+        ObjectMapperConfiguration.getObjectMapper()
+                .readValue(req.getReader(), CreateToDoItemRequest.class);
+
 
         //with the object mapper we convert the JSON from the request from postman
         //we read with object mapper
 
         UpdateToDoItemRequest request =
-                objectMapper.readValue(req.getReader(), UpdateToDoItemRequest.class);
+                ObjectMapperConfiguration.getObjectMapper()
+                        .readValue(req.getReader(), UpdateToDoItemRequest.class);
 
         //we call from service method updateToDoItem
 
@@ -81,15 +84,17 @@ public class ToDoItemServlet extends HttpServlet {
 
         try {
             List<ToDoItem> toDoItems = toDoItemService.getToDoItems();
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
 
-            String response = objectMapper.writeValueAsString(toDoItems);
+            ObjectMapperConfiguration.getObjectMapper()
+                    .readValue(req.getReader(), CreateToDoItemRequest.class);
+
+            String response = ObjectMapperConfiguration.getObjectMapper()
+                    .writeValueAsString(toDoItems);
 
             resp.getWriter().print(response);
 
         } catch (SQLException | ClassNotFoundException e) {
-            resp.sendError(500,"Internal Server Error: " + e.getMessage());
+            resp.sendError(500, "Internal Server Error: " + e.getMessage());
         }
     }
 }
