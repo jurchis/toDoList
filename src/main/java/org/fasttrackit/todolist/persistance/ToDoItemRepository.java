@@ -14,7 +14,7 @@ public class ToDoItemRepository {
         String sql = "INSERT INTO to_do_item (description, deadline) VALUES (?, ?);";
 
         //try-with-resources
-        try (Connection connection = DatabaseConfiguration.getConnection();
+            try (Connection connection = DatabaseConfiguration.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
 
             preparedStatement.setString(1, request.getDescription());
